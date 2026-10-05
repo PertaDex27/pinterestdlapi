@@ -240,6 +240,6 @@ Semua konten yang lu unduh itu hak kreatornya masing-masing — jangan dijual ul
 
 Copyright © 2026 **XyncTeam** · Dirilis dengan lisensi [MIT](LICENSE)
 
-Kalau kepake, kasih ⭐ ya, biar yang lain ikut nemu 😊
+Jangan lupa kasih ⭐, biar org lain bisa nemuin repo ini 😊🙏
 
 </div>
