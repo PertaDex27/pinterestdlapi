@@ -1112,7 +1112,7 @@ function corsHeaders() {
     "access-control-allow-methods": "GET,HEAD,OPTIONS",
     "access-control-allow-headers": "content-type,range",
     "access-control-expose-headers":
-      "content-length,content-range,accept-ranges,x-pindl-id,x-pindl-variant,x-pindl-format,x-pindl-note",
+      "content-length,content-range,accept-ranges,retry-after,x-pindl-id,x-pindl-variant,x-pindl-format,x-pindl-note,x-pindl-limit,x-pindl-limit-remaining,x-pindl-limit-reset,x-pindl-limit-window",
     "access-control-max-age": "86400"
   };
 }
@@ -1404,8 +1404,8 @@ function handleIndex(req, res, origin) {
         { path: "/api/resolve?url=https://pin.it/xxxx", info: "Ubah link pendek jadi link pin penuh" },
         { path: "/api/pin?url=<link|id|pin.it>", info: "Metadata pin + semua foto dan video" },
         {
-          path: "/api/download?url=<link|id>&kind=video|image&q=720w&i=0&mode=redirect|proxy&json=1",
-          info: "Ambil media. Default 302 langsung ke CDN Pinterest"
+          path: "/api/download?url=<link|id>&kind=video|image&q=720w&i=0&dl=1&mode=redirect|proxy&json=1",
+          info: "Ambil media. Default 302 langsung ke CDN Pinterest, tambahkan dl=1 supaya berkasnya langsung terunduh"
         },
         { path: "/api/proxy?u=<url media>", info: "Proxy media pinimg/giphy (maksimal 4 MB per respons)" },
         { path: "/api/probe?url=<link|id>", info: "Cek varian video mana yang masih hidup" }
@@ -1469,7 +1469,8 @@ async function handleDownload(req, res, params, origin) {
   const kind = (params.get("kind") || "").toLowerCase();
   const index = Number(params.get("i") || 0);
   const quality = params.get("q") || params.get("quality");
-  const mode = (params.get("mode") || "redirect").toLowerCase();
+  const dlFlag = params.get("dl") === "1" || params.get("download") === "1";
+  const mode = (params.get("mode") || (dlFlag ? "proxy" : "redirect")).toLowerCase();
 
   if (!["redirect", "url", "proxy", "stream"].includes(mode)) {
     throw new HttpError(400, "BAD_MODE", "Parameter 'mode' hanya menerima redirect atau proxy");
@@ -1723,7 +1724,7 @@ export async function handleApi(req, res, route) {
           "GET /api/health",
           "GET /api/resolve?url=",
           "GET /api/pin?url=",
-          "GET /api/download?url=&kind=video|image&q=720w&i=0&mode=redirect|proxy&json=1",
+          "GET /api/download?url=&kind=video|image&q=720w&i=0&dl=1&mode=redirect|proxy&json=1",
           "GET /api/proxy?u=",
           "GET /api/probe?url="
         ]
