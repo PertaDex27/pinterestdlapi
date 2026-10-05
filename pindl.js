@@ -1371,7 +1371,6 @@ async function applyRateLimit(req, res, url) {
     resetDalamDetik: usage.resetIn,
     resetPada: new Date(Date.now() + usage.resetIn * 1000).toISOString(),
     store: usage.store,
-    whitelistAktif: RATE.whitelist.length > 0
   };
   if (!info.allowed) {
     sendJson(
@@ -1399,7 +1398,7 @@ function handleIndex(req, res, origin) {
     data: {
       service: "pindl-api",
       version: VERSION,
-      deskripsi: "API pengunduh media Pinterest: foto, video, dan gif. Tanpa API key, tanpa login.",
+      deskripsi: "API pengunduh media Pinterest: foto, video, dan gif, Tanpa login.",
       endpoints: [
         { path: "/api/health", info: "Status layanan" },
         { path: "/api/resolve?url=https://pin.it/xxxx", info: "Ubah link pendek jadi link pin penuh" },
@@ -1419,16 +1418,9 @@ function handleIndex(req, res, origin) {
       batas: {
         harian: limitDisabled() ? null : RATE.limit,
         per: "24 jam per alamat IP",
-        header: ["x-pindl-limit", "x-pindl-limit-remaining", "x-pindl-limit-reset"],
-        whitelist: RATE.whitelist.length > 0 ? "aktif, kirim header x-pindl-key" : "belum diatur pemilik API",
-        penyimpanan: RATE.storeUrl && RATE.storeToken ? "redis" : "memori per instans"
       },
       catatan: [
-        "Semua respons JSON memakai bentuk { ok, data } atau { ok, error { code, message } }.",
-        "Setiap permintaan dihitung, termasuk unduhan. Permintaan OPTIONS tidak dihitung.",
-        "Mode redirect (default) menghemat kuota: file diambil langsung dari CDN Pinterest.",
-        "Mode proxy cocok untuk file kecil karena Vercel membatasi satu respons maksimal 4 MB.",
-        "File lebih besar dari 4 MB otomatis dialihkan 302 ke CDN, jadi unduhan tetap jalan."
+        "Karena keterbatasan vercel, jadi max file adalah 4MB saja tapi tenang kalau mencapai limit max akan tetap jalan sudah di handle oleh system api."
       ]
     }
   });
@@ -1447,9 +1439,6 @@ function handleHealth(req, res) {
       pembatas: {
         batas: limitDisabled() ? null : RATE.limit,
         per: "24 jam",
-        dasar: "alamat IP pemanggil, atau kunci pada header x-pindl-key atau parameter key",
-        penyimpanan: RATE.storeUrl && RATE.storeToken ? "redis" : "memori per instans",
-        whitelist: RATE.whitelist.length > 0,
         kuotaAnda: res.pindlQuota || null
       }
     }
