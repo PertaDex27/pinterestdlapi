@@ -1,0 +1,13 @@
+{
+  "name": "pindl-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "API pengunduh media Pinterest (foto, video, gif).",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "node local.js"
+  }
+}
