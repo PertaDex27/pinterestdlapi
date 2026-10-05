@@ -1236,7 +1236,8 @@ async function pipeUpstream(req, res, upstream, headers, limitBytes) {
 function redirectTo(res, target, extra = {}) {
   res.writeHead(302, {
     location: target,
-    "cache-control": "public, max-age=300",
+    "cache-control": "private, no-store",
+    vary: "Range",
     ...corsHeaders(),
     ...extra
   });
