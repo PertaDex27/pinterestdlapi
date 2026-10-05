@@ -9,12 +9,18 @@ Gak ada API key, gak ada login, gak ada `npm install`.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FPertaDex27%2Fpinterestdlapi)
 
-![Node](https://img.shields.io/badge/node-%E2%89%A518-3c873a?style=flat-square&logo=node.js&logoColor=white)
-![Dependencies](https://img.shields.io/badge/dependencies-0-success?style=flat-square)
-![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
-![Made by](https://img.shields.io/badge/made_by-XyncTeam-8e44ad?style=flat-square)
-![Stars](https://img.shields.io/github/stars/PertaDex27/pinterestdlapi?style=flat-square&color=f1c40f&label=stars)
-![Live](https://img.shields.io/badge/live-pinterestdlapi.vercel.app-000000?style=flat-square&logo=vercel&logoColor=white)
+[![Live](https://img.shields.io/badge/live-pinterestdlapi.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://pinterestdlapi.vercel.app/api)
+[![Node](https://img.shields.io/badge/node-%E2%89%A518-3c873a?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
+[![Dependencies](https://img.shields.io/badge/dependencies-0-success?style=for-the-badge)](https://github.com/PertaDex27/pinterestdlapi)
+
+[![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
+[![Made by](https://img.shields.io/badge/made_by-XyncTeam-8e44ad?style=for-the-badge)](https://github.com/PertaDex27)
+[![Stars](https://img.shields.io/github/stars/PertaDex27/pinterestdlapi?style=for-the-badge&color=f1c40f&label=stars&logo=github)](https://github.com/PertaDex27/pinterestdlapi/stargazers)
+[![Forks](https://img.shields.io/github/forks/PertaDex27/pinterestdlapi?style=for-the-badge&color=1abc9c&label=forks&logo=github)](https://github.com/PertaDex27/pinterestdlapi/network/members)
+
+[![Last commit](https://img.shields.io/github/last-commit/PertaDex27/pinterestdlapi?style=for-the-badge&color=e67e22&label=last%20commit&logo=git)](https://github.com/PertaDex27/pinterestdlapi/commits)
+[![Issues](https://img.shields.io/github/issues/PertaDex27/pinterestdlapi?style=for-the-badge&color=e74c3c&label=issues&logo=githubactions)](https://github.com/PertaDex27/pinterestdlapi/issues)
+[![Repo size](https://img.shields.io/github/repo-size/PertaDex27/pinterestdlapi?style=for-the-badge&color=9b59b6&label=repo%20size)](https://github.com/PertaDex27/pinterestdlapi)
 
 [🚀 Coba sekarang](https://pinterestdlapi.vercel.app/api) · [📖 Endpoint](#-endpoint) · [🛠️ Deploy sendiri](#%EF%B8%8F-deploy-sendiri) · [🐛 Lapor bug](https://github.com/PertaDex27/pinterestdlapi/issues)
 
@@ -231,8 +237,6 @@ Semua konten yang lu unduh itu hak kreatornya masing-masing — jangan dijual ul
 ---
 
 <div align="center">
-
-**Dibikin sambil ngopi sama [XyncTeam](https://github.com/XyncTeam) ☕**
 
 Copyright © 2026 **XyncTeam** · Dirilis dengan lisensi [MIT](LICENSE)
 
