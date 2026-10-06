@@ -1,3 +1,6 @@
+// © XYNCTEAM 
+// JANGAN DIUBAH KALAU GK PAHAM!
+// KALO PAHAM LU UBAH GPP
 const VERSION = "1.0.1";
 
 class HttpError extends Error {
