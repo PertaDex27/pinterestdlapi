@@ -2,9 +2,9 @@
 
 # 📌 Pindl API
 
-**Pinterest downloader buat lu yang males ribet.**
+**Pinterest downloader buat lu yang males ribet — plus bonus converter video ke GIF.**
 
-Lempar linknya, balik jadi file. Foto, video, gif — semua diurus.
+Lempar linknya, balik jadi file. Foto, video, gif, semua diurus.
 Gak ada API key, gak ada login, gak ada `npm install`.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FPertaDex27%2Fpinterestdlapi)
@@ -12,6 +12,7 @@ Gak ada API key, gak ada login, gak ada `npm install`.
 [![Live](https://img.shields.io/badge/live-pinterestdlapi.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://pinterestdlapi.vercel.app/api)
 [![Node](https://img.shields.io/badge/node-%E2%89%A518-3c873a?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
 [![Dependencies](https://img.shields.io/badge/dependencies-0-success?style=for-the-badge)](https://github.com/PertaDex27/pinterestdlapi)
+[![Video to GIF](https://img.shields.io/badge/bonus-video_to_gif-ff69b4?style=for-the-badge)](#-video-to-gif)
 
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
 [![Made by](https://img.shields.io/badge/made_by-XyncTeam-8e44ad?style=for-the-badge)](https://github.com/PertaDex27)
@@ -22,7 +23,7 @@ Gak ada API key, gak ada login, gak ada `npm install`.
 [![Issues](https://img.shields.io/github/issues/PertaDex27/pinterestdlapi?style=for-the-badge&color=e74c3c&label=issues&logo=githubactions)](https://github.com/PertaDex27/pinterestdlapi/issues)
 [![Repo size](https://img.shields.io/github/repo-size/PertaDex27/pinterestdlapi?style=for-the-badge&color=9b59b6&label=repo%20size)](https://github.com/PertaDex27/pinterestdlapi)
 
-[🚀 Coba sekarang](https://pinterestdlapi.vercel.app/api) · [📖 Endpoint](#-endpoint) · [🛠️ Deploy sendiri](#%EF%B8%8F-deploy-sendiri) · [🐛 Lapor bug](https://github.com/PertaDex27/pinterestdlapi/issues)
+[🚀 Coba sekarang](https://pinterestdlapi.vercel.app/api) · [📖 Endpoint](#-endpoint) · [🎬 Video to GIF](#-video-to-gif) · [🛠️ Deploy sendiri](#%EF%B8%8F-deploy-sendiri) · [🐛 Lapor bug](https://github.com/PertaDex27/pinterestdlapi/issues)
 
 </div>
 
@@ -31,6 +32,8 @@ Gak ada API key, gak ada login, gak ada `npm install`.
 ## 🤔 Ini apa sih?
 
 Pindl API itu REST API kecil buat ngambil media dari Pinterest. Kasih link pin, ID pin, atau link pendek `pin.it` — nanti balikannya metadata pin plus semua foto dan video lengkap sama link unduhannya.
+
+Terus ada bonus satu endpoint: **video ke GIF**. Kasih link video apa aja (mp4, webm, mov, mkv, dll), dia balikin GIF siap pakai — lengkap sama potong durasi, atur fps, ukuran, crop, dan pilih encoder-nya.
 
 Semuanya nulis pakai JavaScript murni. **Nol dependensi.** Gak ada `node_modules`, gak ada retasan library yang tiap minggu harus di-update. Cukup Node 18 ke atas, deploy ke Vercel, langsung jalan.
 
@@ -45,6 +48,7 @@ Btw ini juga udah live, jadi lu bisa langsung nyoba tanpa deploy apa-apa:
 - 🔁 **Anti gagal deteksi** — payload Pinterest suka ilang random, API ini otomatis nyoba ulang pakai profil browser lain
 - ✅ **Link video diverifikasi dulu** sebelum ditampilin, jadi gak ada link mati
 - ⚡ **Hemat kuota** — default-nya file ditarik langsung dari CDN Pinterest (302), bukan lewat server Vercel lu
+- 🎞️ **Bonus video ke GIF** — potong, atur fps, resize, crop, semua dari satu request
 - 🌐 **CORS terbuka** — bisa dipanggil dari web, bot, atau mana pun
 
 ## 🔌 Endpoint
@@ -60,6 +64,7 @@ Base URL: `https://pinterestdlapi.vercel.app`
 | `GET` | `/api/download?url=` | Ambil medianya (foto/video/gif) |
 | `GET` | `/api/proxy?u=` | Proxy media dari `pinimg.com` / `giphy.com` |
 | `GET` | `/api/probe?url=` | Cek varian video mana yang masih hidup |
+| `GET` / `POST` | `/api/videotogif?url=` | Ubah video jadi GIF (bisa upload langsung juga) |
 
 Semua endpoint nerima `GET`, dan balasannya konsisten:
 
@@ -78,6 +83,54 @@ Semua endpoint nerima `GET`, dan balasannya konsisten:
 | `i` | ❌ | Foto ke berapa, mulai dari `0` (default `0` = paling jernih) |
 | `mode` | ❌ | `redirect` (default) atau `proxy` |
 | `json` | ❌ | Isi `1` kalau cuma mau liat pilihannya tanpa ikut unduh |
+
+## 🎬 Video to GIF
+
+Endpoint buat ngubah video jadi GIF.
+
+```
+GET /api/videotogif?url=<link video>&start=0&end=5&fps=12&size=480&crop=none&method=ezgif&mode=redirect|proxy&json=1
+```
+
+| Param | Wajib | Keterangan |
+| :--- | :---: | :--- |
+| `url` / `u` / `video` | ✅* | Link video langsung. Format: `mp4`, `m4v`, `webm`, `mov`, `avi`, `mkv`, `flv`, `wmv`, `mpg`, `mpeg`, `3gp`, `ts`, `ogv` |
+| `start` / `s` | ❌ | Detik mulai, default `0` |
+| `end` / `e` | ❌ | Detik akhir. Kosongin = ngikut batas `max` |
+| `fps` / `f` | ❌ | `1` - `50`, default `10`. Makin gede makin mulus, tapi filenya makin berat |
+| `size` | ❌ | `original`, `1280`, `600`, `540`, `500`, `480`, `400`, `320`, `720p`, `480p`, `360p`, `320p`, `1200w`, `1200h` |
+| `crop` | ❌ | `none`, `auto`, `1:1`, `4:3`, `16:9`, `3:2`, `2:1`, `1:2`, `2:3`, `3:4`, `4:5`, `5:4`, `9:16` |
+| `ar` | ❌ | Paksa rasio output: `no` + semua rasio di atas |
+| `method` | ❌ | `ezgif` (cepat), `gifski` (paling bagus), `ffmpeg_dithering` |
+| `loop` | ❌ | Jumlah loop, default `0` = muter terus |
+| `max` | ❌ | Batas durasi potongan, default `15` detik, maks `60` |
+| `mode` | ❌ | `redirect` (default, 302 ke file GIF) atau `proxy` (GIF-nya lewat server sendiri, maks 4 MB) |
+| `json` | ❌ | Isi `1` kalau cuma mau detail GIF-nya tanpa ngunduh |
+| `fresh` | ❌ | Isi `1` buat maksa convert ulang, ngelewatin cache |
+
+**Kalau mau upload langsung** (gak pakai link), kirim `POST` ke `/api/videotogif?start=0&end=3` dengan salah satu cara:
+- `multipart/form-data` field `video`
+- atau raw body video + header `x-filename: nama.mp4`
+
+**Contoh balasan `json=1`:**
+
+```json
+{
+  "ok": true,
+  "data": {
+    "gif": {
+      "url": "https://ezgif.com/save/ezgif-6384bb535f8e2395.gif",
+      "preview": "https://s6.ezgif.com/tmp/ezgif-6384bb535f8e2395.gif",
+      "lebar": 320,
+      "tinggi": 180,
+      "frame": 20,
+      "ukuranEzGif": "811.08KiB"
+    },
+    "video": { "nama": "cut.mp4", "ukuran": "967.8 KB", "durasi": 10, "sourceFps": 30 },
+    "setelan": { "start": 0, "end": 2, "durasiClip": 2, "fps": 10, "size": "320", "crop": "none", "loop": 0, "method": "ezgif" }
+  }
+}
+```
 
 ## 🚀 Contoh pakai
 
@@ -105,6 +158,28 @@ curl -L -o foto.jpg "https://pinterestdlapi.vercel.app/api/download?url=56006490
 curl "https://pinterestdlapi.vercel.app/api/download?url=1119496419891744897&kind=video&json=1"
 ```
 
+**Video jadi GIF, potong 2 detik, fps 12**
+
+```bash
+curl -L -o meme.gif "https://pinterestdlapi.vercel.app/api/videotogif?url=https://situs.com/video.mp4&start=2&end=4&fps=12&size=480"
+```
+
+**GIF persegi buat feed, pake Gifski**
+
+```bash
+curl -L -o kotak.gif "https://pinterestdlapi.vercel.app/api/videotogif?url=https://situs.com/video.mp4&start=0&end=3&crop=1:1&method=gifski"
+```
+
+**Upload video sendiri ke endpoint GIF**
+
+```bash
+# upload video dari komputer sendiri, balikannya JSON berisi link GIF-nya
+curl -X POST -F "video=@cut.mp4" "https://pinterestdlapi.vercel.app/api/videotogif?start=0&end=2&fps=10"
+
+# minta GIF-nya dikirim lewat server API (bukan 302 ke ezgif), cocok buat file kecil
+curl -L -o hasil.gif "https://pinterestdlapi.vercel.app/api/videotogif?url=https://situs.com/video.mp4&mode=proxy"
+```
+
 **Dari JavaScript**
 
 ```js
@@ -121,6 +196,26 @@ if (ok) {
 }
 ```
 
+```js
+const q = new URLSearchParams({
+  url: "https://situs.com/video.mp4",
+  start: 1,
+  end: 5,
+  fps: 15,
+  size: "480",
+  json: 1,
+});
+
+const gif = await fetch(`https://pinterestdlapi.vercel.app/api/videotogif?${q}`).then((r) => r.json());
+
+if (gif.ok) {
+  console.log("GIF jadi:", gif.data.gif.url);
+  console.log(`${gif.data.gif.lebar}x${gif.data.gif.tinggi}, ${gif.data.gif.frame} frame`);
+} else {
+  console.log("gagal:", gif.error.code, gif.error.message);
+}
+```
+
 **Dari Python**
 
 ```python
@@ -131,6 +226,19 @@ r = requests.get("https://pinterestdlapi.vercel.app/api/pin",
 
 for v in r["data"]["videos"]:
     print(v["label"], v["format"], v["url"])
+```
+
+```python
+import requests
+
+r = requests.get("https://pinterestdlapi.vercel.app/api/videotogif",
+                 params={"url": "https://situs.com/video.mp4", "start": 0, "end": 4, "fps": 12, "size": 480}).json()
+
+if r["ok"]:
+    gif = requests.get(r["data"]["gif"]["url"])
+    open("hasil.gif", "wb").write(gif.content)
+else:
+    print(r["error"])
 ```
 
 **Langsung tampilin di HTML**
@@ -216,8 +324,9 @@ Buka `http://localhost:3210/api`. Mau ganti port? `PORT=4000 node local.js`.
 ## 📁 Isi repo
 
 ```
-pindl.js        → mesinnya, semua logika ada di sini (nol dependensi)
-api/            → 7 endpoint, isinya cuma nerusin ke pindl.js
+pindl.js        → mesin Pinterest, semua logika utama ada di sini (nol dependensi)
+videotogif.js   → mesin video ke GIF, semua logika GIF ada di sini (nol dependensi)
+api/            → 8 endpoint, isinya cuma nerusin ke dua mesin di atas
 local.js        → runner buat tes di komputer sendiri (gak dipake Vercel)
 vercel.json     → setelan durasi fungsi 60 detik
 package.json    → penanda proyek ESM, tanpa dependensi
@@ -230,9 +339,19 @@ package.json    → penanda proyek ESM, tanpa dependensi
 - Pin privat, board rahasia, dan konten yang butuh login gak bisa diambil (ya jelas lah wkwk 😹)
 - Pinterest kadang ngubah struktur datanya. Kalau tiba-tiba ada yang rusak, buka issue aja, nanti dicek
 
+### Khusus video to GIF
+
+- Berkas GIF cuma nangkring di server ezgif sekitar **1 jam**, jadi di-link langsung ke sana bisa mati. Kalau lu hit endpoint API-nya lagi, dia otomatis convert ulang — gak usah panik 🔥
+- Batas aman biar gak kena limit Vercel 60 detik: potongan **maks 15 detik** (bisa dinaikin lewat `max`, maks 60) dan **maks 400 frame** per GIF
+- Video yang diunduh dari link dibatasi **25 MB**. Kalau lebih gede, download dulu videonya terus upload lewat `POST`
+- Upload langsung ke Vercel juga kena limit body **~4 MB** — video gede mending pakai parameter `url`
+- Endpoint `videotogif` jalan lewat antrean **2 proses paralel** biar ezgif gak ngambek, jadi kalau lagi rame bisa agak ngantri bentar
+- Hasil convert disimpen di cache **30 menit**. Mau maksa convert ulang? Pakai `fresh=1`
+- Ini nempel ke ezgif.com yang **bukan API resmi**. Jangan dipakai buat trafik gede-gedean, nanti mereka yang repot 🙏
+
 ## ⚠️ Disclaimer
 
-Semua konten yang lu unduh itu hak kreatornya masing-masing — jangan dijual ulang, jangan diklaim punya sendiri, dan jangan dipake buat nyepam Pinterest. Pindl API bukan produk resmi Pinterest dan gak berafiliasi sama mereka. Yang make tool ini tanggung jawab sendiri ya 🤝
+Semua konten yang lu unduh itu hak kreatornya masing-masing — jangan dijual ulang, jangan diklaim punya sendiri, dan jangan dipake buat nyepam Pinterest. Pindl API bukan produk resmi Pinterest dan gak berafiliasi sama mereka. Endpoint video to GIF juga bukan produk resmi ezgif.com. Yang make tool ini tanggung jawab sendiri ya 🤝
 
 ---
 
