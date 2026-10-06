@@ -347,7 +347,6 @@ package.json    → penanda proyek ESM, tanpa dependensi
 - Upload langsung ke Vercel juga kena limit body **~4 MB** — video gede mending pakai parameter `url`
 - Endpoint `videotogif` jalan lewat antrean **2 proses paralel** biar ezgif gak ngambek, jadi kalau lagi rame bisa agak ngantri bentar
 - Hasil convert disimpen di cache **30 menit**. Mau maksa convert ulang? Pakai `fresh=1`
-- Ini nempel ke ezgif.com yang **bukan API resmi**. Jangan dipakai buat trafik gede-gedean, nanti mereka yang repot 🙏
 
 ## ⚠️ Disclaimer
 
